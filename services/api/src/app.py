@@ -55,7 +55,7 @@ async def blocking_request(sid, request: RequestModel):
         response = ResponseModel(
             id=request.id,
             received=request.received,
-            blocking=True,
+            blocking=request.blocking,
             session_id=request.session_id,
             status=ResponseModel.JobStatus.RECEIVED,
             description="Your job has been received and is waiting approval.",
@@ -93,6 +93,38 @@ async def blocking_response(id: str):
     response = ResponseModel.load(client, id, result=False)
 
     await _blocking_response(response)
+
+
+@app.post("/request")
+async def response(request: RequestModel):
+    try:
+        request = RequestModel(**request)
+        request.received = datetime.now()
+        request.id = str(ObjectId())
+        request.blocking = False
+
+        process_request.apply_async([request], queue="request").forget()
+
+        response = ResponseModel(
+            id=request.id,
+            received=request.received,
+            blocking=request.blocking,
+            status=ResponseModel.JobStatus.RECEIVED,
+            description="Your job has been received and is waiting approval.",
+        ).log(logger)
+
+    except Exception as exception:
+        response = ResponseModel(
+            id=request.id,
+            received=request.received,
+            blocking=request.blocking,
+            session_id=request.session_id,
+            status=ResponseModel.JobStatus.ERROR,
+            description=str(exception),
+        ).log(logger)
+
+    return response
+    
 
 
 @app.get("/response/{id}")
