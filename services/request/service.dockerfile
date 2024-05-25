@@ -1,4 +1,4 @@
-FROM request_base:latest
+FROM --platform=linux/amd64 request_base:latest
 
 RUN useradd -ms /bin/bash celery \
     && chown -R celery: /opt/conda/envs/service/ 

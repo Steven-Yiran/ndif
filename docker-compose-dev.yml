@@ -22,33 +22,43 @@ services:
     ports:
       - 5001:80
     environment:
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend 
+      RMQ_URL: amqp://guest:guest@10.0.0.123:5002/
+      MONGO_URL: mongodb://user:pass@10.0.0.123:5003/celery_result_backend 
       WORKERS: 2
 
   request-dev:
     image: request:latest
     environment:
-      API_URL: http://10.201.22.179:5001
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend
+      API_URL: http://10.0.0.123:5001
+      RMQ_URL: amqp://guest:guest@10.0.0.123:5002/
+      MONGO_URL: mongodb://user:pass@10.0.0.123:5003/celery_result_backend
 
-  model-gpt2-dev:
+  # model-gpt2-dev:
+  #   image: model:latest
+  #   environment:
+  #     API_URL: http://10.0.0.123:5001
+  #     RMQ_URL: amqp://guest:guest@10.0.0.123:5002/
+  #     MONGO_URL: mongodb://user:pass@10.0.0.123:5003/celery_result_backend 
+  #     REPO_ID: gpt2
+  #   volumes:
+  #     - ~/.cache/huggingface/hub/:/home/celery/.cache/huggingface/hub
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 8
+    #           capabilities: [gpu]
+
+  model-pythia-dev:
     image: model:latest
     environment:
-      API_URL: http://10.201.22.179:5001
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend 
-      REPO_ID: gpt2
+      API_URL: http://10.0.0.123:5001
+      RMQ_URL: amqp://guest:guest@10.0.0.123:5002/
+      MONGO_URL: mongodb://user:pass@10.0.0.123:5003/celery_result_backend 
+      REPO_ID: EleutherAI/pythia-14m
     volumes:
-      - /disk/u/jfiottok/.cache/huggingface/hub/:/home/celery/.cache/huggingface/hub
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 8
-              capabilities: [gpu]
+      - ~/.cache/huggingface/hub/:/home/celery/.cache/huggingface/hub
 
  
 

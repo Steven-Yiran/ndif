@@ -6,7 +6,7 @@ import gridfs
 import socketio
 import uvicorn
 from bson.objectid import ObjectId
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from fastapi_socketio import SocketManager
@@ -18,7 +18,7 @@ from .celery import celeryconfig
 from .celery.tasks import app as celery_app
 from .celery.tasks import process_request
 from .pydantics import ResponseModel, ResultModel
-from .api_key import api_key_auth
+# from .api_key import api_key_auth
 
 # Attache to gunicorn logger
 logger = logging.getLogger("gunicorn.error")
@@ -45,7 +45,7 @@ sm = SocketManager(
 
 @app.post("/request")
 async def request(
-    request: RequestModel, api_key=Depends(api_key_auth)
+    request: RequestModel
 ) -> ResponseModel:
     """Endpoint to submit request.
 

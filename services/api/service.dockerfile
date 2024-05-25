@@ -1,4 +1,4 @@
-FROM api_base:latest
+FROM --platform=linux/amd64 api_base:latest
 
 WORKDIR /wd
 
