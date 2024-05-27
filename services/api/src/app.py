@@ -14,7 +14,7 @@ from pymongo import MongoClient
 
 from nnsight.pydantics import RequestModel
 
-from .api_key import api_key_auth
+#from .api_key import api_key_auth
 from .celery import celeryconfig
 from .celery.tasks import app as celery_app
 from .celery.tasks import process_request
@@ -45,7 +45,7 @@ sm = SocketManager(
 
 @app.post("/request")
 async def request(
-    request: RequestModel, api_key=Depends(api_key_auth)
+    request: RequestModel, #api_key=Depends(api_key_auth)
 ) -> ResponseModel:
     """Endpoint to submit request.
 

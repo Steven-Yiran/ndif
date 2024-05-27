@@ -22,33 +22,33 @@ services:
     ports:
       - 5001:80
     environment:
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend 
+      RMQ_URL: amqp://guest:guest@172.20.233.17:5002/
+      MONGO_URL: mongodb://user:pass@172.20.233.17:5003/celery_result_backend 
       WORKERS: 2
 
   request-dev:
     image: request:latest
     environment:
-      API_URL: http://10.201.22.179:5001
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend
+      API_URL: http://172.20.233.17:5001
+      RMQ_URL: amqp://guest:guest@172.20.233.17:5002/
+      MONGO_URL: mongodb://user:pass@172.20.233.17:5003/celery_result_backend
 
   model-gpt2-dev:
     image: model:latest
     environment:
-      API_URL: http://10.201.22.179:5001
-      RMQ_URL: amqp://guest:guest@10.201.22.179:5002/
-      MONGO_URL: mongodb://user:pass@10.201.22.179:5003/celery_result_backend 
-      REPO_ID: gpt2
+      API_URL: http://172.20.233.17:5001
+      RMQ_URL: amqp://guest:guest@172.20.233.17:5002/
+      MONGO_URL: mongodb://user:pass@172.20.233.17:5003/celery_result_backend 
+      REPO_ID: Intel/dynamic_tinybert #gpt2
     volumes:
-      - /disk/u/jfiottok/.cache/huggingface/hub/:/home/celery/.cache/huggingface/hub
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 8
-              capabilities: [gpu]
+      - /Users/yiranshi/.cache/huggingface/hub:/home/celery/.cache/huggingface/hub
+    # deploy:
+    #   resources:
+    #     reservations:
+          # devices:
+          #   - driver: nvidia
+          #     count: 8
+          #     capabilities: [gpu]
 
  
 
